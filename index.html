@@ -155,7 +155,7 @@
     /* ── HERO ── */
     #hero {
       position: relative;
-      padding: 96px 0 24px;
+      padding: 96px 24px 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -247,10 +247,45 @@
 
     /* ── WORKS ── */
     #works { padding-top: 48px; }
-    #works .section-title { margin-bottom: 32px; }
+    #works .section-title { margin-bottom: 0; }
+    .works-title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .works-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .works-nav-btn {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.6);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .works-nav-btn:hover {
+      border-color: rgba(255,255,255,0.6);
+      color: var(--white);
+      background: rgba(255,255,255,0.06);
+    }
+    @media (max-width: 480px) {
+      .works-title-row { gap: 12px; }
+      .works-nav-btn { font-size: 11px; padding: 7px 12px; }
+    }
 
     .works-category {
       margin-bottom: 72px;
+      scroll-margin-top: 80px;
     }
     .works-category:first-child {
       padding-top: 32px;
@@ -614,16 +649,8 @@
       letter-spacing: 0.1em;
     }
 
-    /* ── SCROLL SNAP ── */
-    html {
-      scroll-snap-type: y proximity;
-    }
-    #hero {
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-    }
+    /* ── SCROLL SNAP (disabled — felt unnatural) ── */
     .snap-section {
-      scroll-snap-align: start;
     }
 
     /* ── REVEAL ANIMATIONS ── */
@@ -642,6 +669,37 @@
     .reveal-d4 { transition-delay: 0.32s; }
     .reveal-d5 { transition-delay: 0.4s; }
 
+    /* ── BACK TO TOP ── */
+    #backToTop {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 90;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(20,20,20,0.85);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.2s;
+    }
+    #backToTop.visible {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+    #backToTop:hover {
+      border-color: rgba(255,255,255,0.4);
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       nav { padding: 0 24px; }
@@ -655,6 +713,22 @@
     @media (max-width: 480px) {
       .works-grid { grid-template-columns: 1fr; }
       .about-stats { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      #hero { padding: 72px 16px 20px; }
+      .hero-sub {
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        white-space: normal;
+      }
+    }
+    @media (max-width: 768px) {
+      .gallery-nav-btn.prev { left: 4px; }
+      .gallery-nav-btn.next { right: 4px; }
+      .gallery-nav-btn {
+        background: rgba(0,0,0,0.4);
+        opacity: 0.9;
+      }
     }
   </style>
 </head>
@@ -693,7 +767,14 @@
 <div class="snap-section">
 <section id="works">
   <p class="section-label reveal">Selected Works</p>
-  <h2 class="section-title reveal reveal-d1">Works</h2>
+  <div class="works-title-row reveal reveal-d1">
+    <h2 class="section-title">Works</h2>
+    <div class="works-nav">
+      <button class="works-nav-btn" data-target="shortfilm">Short Film</button>
+      <button class="works-nav-btn" data-target="commercial">Commercial</button>
+      <button class="works-nav-btn" data-target="automotive">Automotive</button>
+    </div>
+  </div>
 
   <div id="worksContainer"></div>
 </section>
@@ -798,6 +879,13 @@
   </div>
 </div>
 
+<!-- BACK TO TOP -->
+<button id="backToTop" aria-label="맨 위로">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M3 9l5-5 5 5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
 <script>
   // Hero intro: logo+copy start centered on screen, then settle into the
   // compact top spot while Works/About/Contact slide up from below.
@@ -850,6 +938,9 @@
             el.style.transform = '';
           });
           document.body.style.overflow = '';
+          // Safety net: some mobile browsers don't re-fire IntersectionObserver
+          // after a transform-only animation settles, so force reveal here.
+          document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
         }, 1050);
       }, 500);
     });
@@ -1197,7 +1288,7 @@
       }).join('');
 
       return `
-        <div class="works-category reveal">
+        <div class="works-category reveal" data-cat="${cat}">
           <div class="works-category-title">${title}</div>
           <div class="works-category-desc">${desc}</div>
           <div class="works-grid">${cards}</div>
@@ -1207,6 +1298,13 @@
   }
 
   renderWorks();
+
+  document.querySelectorAll('.works-nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.querySelector(`.works-category[data-cat="${btn.dataset.target}"]`);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
 
   // Modal
   function openModal(youtubeId, title) {
@@ -1352,14 +1450,25 @@
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-      } else {
-        entry.target.classList.remove('visible');
+        revealObserver.unobserve(entry.target);
       }
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
 
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-  document.querySelectorAll('#worksContainer .reveal').forEach(el => revealObserver.observe(el));
+  function checkRevealNow(el) {
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) {
+      el.classList.add('visible');
+    }
+  }
+  document.querySelectorAll('.reveal').forEach(el => {
+    revealObserver.observe(el);
+    checkRevealNow(el);
+  });
+  document.querySelectorAll('#worksContainer .reveal').forEach(el => {
+    revealObserver.observe(el);
+    checkRevealNow(el);
+  });
 
 
   // Drawer
@@ -1386,6 +1495,15 @@
   overlay.addEventListener('click', closeDrawer);
   document.querySelectorAll('.drawer-link').forEach(a => {
     a.addEventListener('click', closeDrawer);
+  });
+
+  // Back to top button
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('visible', window.scrollY > 500);
+  });
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 </script>
 </body>
