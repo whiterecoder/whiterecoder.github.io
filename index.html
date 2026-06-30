@@ -649,8 +649,15 @@
       letter-spacing: 0.1em;
     }
 
-    /* ── SCROLL SNAP (disabled — felt unnatural) ── */
+    /* ── SCROLL SNAP ── */
+    html {
+      scroll-snap-type: y proximity;
+    }
+    #hero {
+      scroll-snap-align: start;
+    }
     .snap-section {
+      scroll-snap-align: start;
     }
 
     /* ── REVEAL ANIMATIONS ── */
@@ -1302,7 +1309,13 @@
   document.querySelectorAll('.works-nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = document.querySelector(`.works-category[data-cat="${btn.dataset.target}"]`);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (!target) return;
+      document.documentElement.style.scrollSnapType = 'none';
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      clearTimeout(window._snapRestoreTimer);
+      window._snapRestoreTimer = setTimeout(() => {
+        document.documentElement.style.scrollSnapType = '';
+      }, 1000);
     });
   });
 
