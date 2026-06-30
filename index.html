@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VANTA — Film Production</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gray-100: #f5f5f5;
+      --gray-400: #999999;
+      --gray-600: #444444;
+      --gray-700: #2a2a2a;
+      --gray-800: #1a1a1a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.32);
+    }
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-logo img {
+      height: 32px;
+      display: block;
+    }
+    /* ── HAMBURGER ── */
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      padding: 4px;
+      z-index: 201;
+      position: relative;
+    }
+    .hamburger span {
+      display: block;
+      height: 1.5px;
+      width: 22px;
+      background: var(--white);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.2s;
+      transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ── DRAWER ── */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s;
+    }
+    .drawer-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .drawer {
+      position: fixed;
+      top: 0; right: 0;
+      z-index: 160;
+      width: 280px;
+      height: 100%;
+      background: #0d0d0d;
+      border-left: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 48px;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer nav-links { list-style: none; }
+    .drawer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .drawer-links li { overflow: hidden; }
+    .drawer-links a {
+      display: block;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 32px;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: color 0.2s, transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s;
+    }
+    .drawer.open .drawer-links li:nth-child(1) a { transform: translateY(0); opacity: 1; transition-delay: 0.1s; }
+    .drawer.open .drawer-links li:nth-child(2) a { transform: translateY(0); opacity: 1; transition-delay: 0.17s; }
+    .drawer.open .drawer-links li:nth-child(3) a { transform: translateY(0); opacity: 1; transition-delay: 0.24s; }
+    .drawer-links a:hover { color: var(--white); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      padding: 96px 0 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      text-align: center;
+      background: #000;
+    }
+    .hero-content {
+      transition: transform 0.8s cubic-bezier(0.4,0,0.2,1);
+    }
+    .hero-logo {
+      height: 125px;
+      display: block;
+      margin: 0 auto 7px;
+      opacity: 1;
+    }
+    .hero-slogan {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(20px, 3vw, 36px);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.9);
+    }
+    .hero-sub {
+      margin-top: 20px;
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadein 1s 1.4s forwards;
+    }
+    .hero-scroll span {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+      animation: scrollPulse 2s 2s infinite;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadein {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 1; }
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 120px 48px;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(32px, 5vw, 60px);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.1;
+      margin-bottom: 60px;
+    }
+
+    /* ── WORKS ── */
+    #works { padding-top: 48px; }
+    #works .section-title { margin-bottom: 32px; }
+
+    .works-category {
+      margin-bottom: 72px;
+    }
+    .works-category:first-child {
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+    .works-category-label {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 8px;
+    }
+    .works-category-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      margin-bottom: 1px;
+      color: var(--white);
+    }
+    .works-category-desc {
+      font-size: 13px;
+      color: var(--gray-400);
+      letter-spacing: 0.06em;
+      margin-bottom: 18px;
+    }
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2px;
+    }
+    .work-card {
+      position: relative;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--gray-800);
+    }
+    .work-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+      display: block;
+    }
+    .work-card:hover img { transform: scale(1.05); }
+    .work-card.letterbox img { transform: scale(1.32); }
+    .work-card.letterbox:hover img { transform: scale(1.37); }
+    .work-card.letterbox.extra-zoom img { transform: scale(1.45); }
+    .work-card.letterbox.extra-zoom:hover img { transform: scale(1.5); }
+    .work-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .work-card:hover .work-card-overlay { opacity: 1; }
+    .work-play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52px;
+      height: 52px;
+      border: 1.5px solid rgba(255,255,255,0.8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .work-card:hover .work-play {
+      transform: translate(-50%, -50%) scale(1.1);
+      background: rgba(255,255,255,0.15);
+    }
+    .work-play svg { margin-left: 3px; }
+    .work-info-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin-bottom: 4px;
+    }
+    .work-info-year {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--gray-400);
+    }
+    .work-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gray-800);
+    }
+    .work-placeholder svg { opacity: 0.15; }
+
+    /* ── GALLERY MODAL ── */
+    .gallery-modal-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,0.96);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .gallery-modal-bg.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .gallery-modal-inner {
+      position: relative;
+      width: min(1000px, 92vw);
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.5s cubic-bezier(0.25,0.46,0.45,0.94) 0.12s,
+                  transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94) 0.12s;
+    }
+    .gallery-modal-bg.open .gallery-modal-inner {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .gallery-img-wrapper {
+      position: relative;
+      width: 100%;
+      transition: height 0.25s ease;
+    }
+    .gallery-main-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-main-img.free-ratio {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: unset;
+      object-fit: contain;
+    }
+    .gallery-img-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .gallery-img-overlay.free-ratio {
+      object-fit: contain;
+    }
+    .gallery-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: white;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .gallery-nav-btn:hover { opacity: 1; }
+    .gallery-nav-btn.prev { left: -52px; }
+    .gallery-nav-btn.next { right: -52px; }
+    .gallery-thumbs {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      justify-content: center;
+    }
+    .gallery-thumb {
+      width: 80px;
+      height: 50px;
+      object-fit: cover;
+      cursor: pointer;
+      opacity: 0.45;
+      border: 1px solid transparent;
+      transition: opacity 0.2s, border-color 0.2s;
+    }
+    .gallery-thumb.active, .gallery-thumb:hover { opacity: 1; border-color: rgba(255,255,255,0.5); }
+    .gallery-counter {
+      margin-top: 14px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--gray-400);
+      text-align: center;
+    }
+    .gallery-close {
+      position: absolute;
+      top: -48px;
+      right: 0;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+    .gallery-close:hover { color: var(--white); }
+
+    /* ── MODAL ── */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,0.92);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-bg.open { display: flex; }
+    .modal-inner {
+      position: relative;
+      width: min(900px, 92vw);
+    }
+    .modal-inner iframe {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: none;
+      display: block;
+    }
+    .modal-close {
+      position: absolute;
+      top: -48px;
+      right: 0;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--white); }
+    .modal-title {
+      margin-top: 20px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── ABOUT ── */
+    #about { border-top: 1px solid var(--gray-700); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .about-body p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 20px;
+    }
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(2, max-content);
+      justify-content: start;
+      gap: 120px;
+    }
+    .stat-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-top: 8px;
+    }
+
+    /* ── CONTACT ── */
+    #contact { border-top: 1px solid var(--gray-700); }
+    .contact-inner {
+      max-width: 640px;
+    }
+    .contact-inner p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 48px;
+    }
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--gray-700);
+    }
+    .contact-row:last-child { border-bottom: none; }
+    .contact-type {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      width: 80px;
+      flex-shrink: 0;
+    }
+    .contact-value {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+    .contact-value:hover { color: var(--gray-400); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--gray-700);
+      padding: 40px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    footer img { height: 24px; }
+    footer p {
+      font-size: 11px;
+      color: var(--gray-400);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── SCROLL SNAP ── */
+    html {
+      scroll-snap-type: y proximity;
+    }
+    #hero {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+    .snap-section {
+      scroll-snap-align: start;
+    }
+
+    /* ── REVEAL ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+    .reveal-d3 { transition-delay: 0.24s; }
+    .reveal-d4 { transition-delay: 0.32s; }
+    .reveal-d5 { transition-delay: 0.4s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; }
+      .nav-links { gap: 24px; }
+      .nav-links a { font-size: 11px; }
+      section { padding: 80px 24px; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .works-grid { grid-template-columns: 1fr 1fr; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 16px; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .works-grid { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" href="#hero">
+    <img src="longlogo 복사본.png" alt="VANTA" />
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="메뉴 열기">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <ul class="drawer-links">
+    <li><a href="#works" class="drawer-link">Works</a></li>
+    <li><a href="#about" class="drawer-link">About</a></li>
+    <li><a href="#contact" class="drawer-link">Contact</a></li>
+  </ul>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <img class="hero-logo" src="whitelogo.png" alt="VANTA" />
+    <h1 class="hero-slogan">MADE FOR THE SCREEN</h1>
+    <p class="hero-sub">Short Film &nbsp;·&nbsp; Commercial &nbsp;·&nbsp; Automotive</p>
+  </div>
+</section>
+
+<!-- WORKS -->
+<div class="snap-section">
+<section id="works">
+  <p class="section-label reveal">Selected Works</p>
+  <h2 class="section-title reveal reveal-d1">Works</h2>
+
+  <div id="worksContainer"></div>
+</section>
+</div>
+
+<!-- ABOUT -->
+<div class="snap-section">
+<section id="about">
+  <p class="section-label reveal">Who We Are</p>
+  <h2 class="section-title reveal reveal-d1">About</h2>
+
+  <div class="about-grid">
+    <div class="about-body reveal reveal-d2">
+      <p>VANTA는 단편영화, 광고, 자동차 영상을 중심으로 활동하는 영상 제작팀입니다. 어둠 속에서 가장 순수한 검정을 뜻하는 이름처럼, 우리는 빛과 그림자의 언어로 이야기를 만들어냅니다.</p>
+      <p>시네마틱한 감수성과 상업적 완성도를 동시에 추구하며, 클라이언트의 비전을 스크린 위에 정밀하게 구현합니다. 기획 단계부터 후반 작업까지 전 과정을 함께합니다.</p>
+    </div>
+    <div class="about-stats reveal reveal-d3">
+      <div>
+        <div class="stat-num" id="statProjects">0+</div>
+        <div class="stat-label">Projects</div>
+      </div>
+      <div>
+        <div class="stat-num">3</div>
+        <div class="stat-label">Years</div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- CONTACT -->
+<div class="snap-section">
+<section id="contact">
+  <p class="section-label reveal">Get In Touch</p>
+  <h2 class="section-title reveal reveal-d1">Contact</h2>
+
+  <div class="contact-inner reveal reveal-d2">
+    <p>프로젝트 문의, 협업 제안, 또는 궁금한 사항이 있으시면 편하게 연락주세요.</p>
+    <div class="contact-links">
+      <div class="contact-row">
+        <span class="contact-type">Phone</span>
+        <a class="contact-value" href="tel:+821048261080">+82 10 4826 1080</a>
+      </div>
+      <div class="contact-row">
+        <span class="contact-type">Email</span>
+        <a class="contact-value" href="mailto:whiterecoder@gmail.com">whiterecoder@gmail.com</a>
+      </div>
+      <div class="contact-row">
+        <span class="contact-type">YouTube</span>
+        <a class="contact-value" href="https://youtube.com/@Vanta_Film" target="_blank" rel="noopener">youtube.com/@Vanta_Film</a>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- FOOTER -->
+<div class="snap-section">
+<footer>
+  <img src="longlogo 복사본.png" alt="VANTA" />
+  <p>COPYRIGHT © VANTA. ALL RIGHTS RESERVED.</p>
+</footer>
+</div>
+
+<!-- GALLERY MODAL -->
+<div class="gallery-modal-bg" id="galleryModal">
+  <div class="gallery-modal-inner">
+    <button class="gallery-close" id="galleryClose">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <line x1="1" y1="1" x2="11" y2="11" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="11" y1="1" x2="1" y2="11" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      Close
+    </button>
+    <div class="gallery-img-wrapper">
+      <img class="gallery-main-img" id="galleryMainImg" src="" alt="" />
+      <img class="gallery-img-overlay" id="galleryImgOverlay" src="" alt="" />
+    </div>
+    <button class="gallery-nav-btn prev" id="galleryPrev">
+      <svg width="12" height="20" viewBox="0 0 12 20" fill="none"><path d="M10 1L2 10l8 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="gallery-nav-btn next" id="galleryNext">
+      <svg width="12" height="20" viewBox="0 0 12 20" fill="none"><path d="M2 1l8 9-8 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="gallery-thumbs" id="galleryThumbs"></div>
+    <div class="gallery-counter" id="galleryCounter"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal-inner">
+    <button class="modal-close" id="modalClose">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <line x1="1" y1="1" x2="11" y2="11" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="11" y1="1" x2="1" y2="11" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      Close
+    </button>
+    <iframe id="modalIframe" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="modal-title" id="modalTitle"></div>
+  </div>
+</div>
+
+<script>
+  // Hero intro: logo+copy start centered on screen, then settle into the
+  // compact top spot while Works/About/Contact slide up from below.
+  // Pure transform animation (no layout/height changes) — smooth, no reflow.
+  (function() {
+    const hero = document.getElementById('hero');
+    const content = document.querySelector('.hero-content');
+    const siblings = Array.from(document.querySelectorAll('.snap-section'));
+
+    document.body.style.overflow = 'hidden';
+    hero.style.overflow = 'visible'; // let centered content escape hero's small box, unclipped
+
+    const pushDown = window.innerHeight;
+    siblings.forEach(el => {
+      el.style.transform = `translateY(${pushDown}px)`;
+    });
+
+    content.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      const rect = content.getBoundingClientRect();
+      const viewportCenterY = window.innerHeight / 2;
+      const contentCenterY = rect.top + rect.height / 2;
+      const delta = viewportCenterY - contentCenterY;
+      content.style.transition = 'none';
+      content.style.transform = `translateY(${delta}px)`;
+
+      requestAnimationFrame(() => {
+        content.style.transition = 'opacity 0.3s ease';
+        content.style.opacity = '1';
+      });
+
+      setTimeout(() => {
+        content.style.transition = 'transform 0.8s cubic-bezier(0.4,0,0.2,1)';
+        content.style.transform = 'translateY(0)';
+
+        setTimeout(() => {
+          siblings.forEach(el => {
+            el.style.transition = 'transform 0.8s cubic-bezier(0.4,0,0.2,1)';
+            el.style.transform = 'translateY(0)';
+          });
+        }, 150);
+
+        setTimeout(() => {
+          hero.style.overflow = '';
+          content.style.transition = '';
+          content.style.transform = '';
+          siblings.forEach(el => {
+            el.style.transition = '';
+            el.style.transform = '';
+          });
+          document.body.style.overflow = '';
+        }, 1050);
+      }, 500);
+    });
+  })();
+
+  // Works data — replace youtube IDs and thumbnails with real ones
+  const works = [
+    {
+      id: 17, category: 'shortfilm',
+      title: 'BLUE MEMORIES', year: '2026',
+      thumb: '스틸컷/단편영화/시퍼런추억/시퍼런추억 스틸컷/시퍼런추억_DI_4444_7092.4_EDI.00_02_16_00.스틸 001.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/단편영화/시퍼런추억/시퍼런추억 스틸컷/시퍼런추억_DI_4444_7092.4_EDI.00_02_16_00.스틸 001.jpg',
+        '스틸컷/단편영화/시퍼런추억/시퍼런추억 스틸컷/시퍼런추억_DI_4444_7092.4_EDI.00_02_59_14.스틸 002.jpg',
+        '스틸컷/단편영화/시퍼런추억/시퍼런추억 스틸컷/시퍼런추억_DI_4444_7092.4_EDI.00_03_10_12.스틸 003.jpg',
+        '스틸컷/단편영화/시퍼런추억/시퍼런추억 스틸컷/시퍼런추억_DI_4444_7092.4_EDI.00_04_30_10.스틸 004.jpg',
+        '스틸컷/단편영화/시퍼런추억/시퍼런추억 스틸컷/시퍼런추억_DI_4444_7092.4_EDI.00_10_16_22.스틸 005.jpg',
+        '스틸컷/단편영화/시퍼런추억/시퍼런추억 스틸컷/시퍼런추억_DI_4444_7092.4_EDI.00_10_34_14.스틸 006.jpg',
+        '스틸컷/단편영화/시퍼런추억/시퍼런추억 스틸컷/시퍼런추억_DI_4444_7092.4_EDI.00_06_10_00.스틸 007.jpg',
+        '스틸컷/단편영화/시퍼런추억/시퍼런추억 스틸컷/시퍼런추억_DI_4444_7092.4_EDI.00_09_29_02.스틸 008.jpg',
+      ]
+    },
+    {
+      id: 18, category: 'shortfilm',
+      title: 'DECLARATION OF A FOOL', year: '2026',
+      thumb: '스틸컷/단편영화/바보선언/C5003.00_51_53_00.스틸 024.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/단편영화/바보선언/C5003.00_51_53_00.스틸 024.jpg',
+        '스틸컷/단편영화/바보선언/C5003.01_05_16_21.스틸 025.jpg',
+        '스틸컷/단편영화/바보선언/C5003.01_05_31_09.스틸 026.jpg',
+        '스틸컷/단편영화/바보선언/C5003.01_15_01_18.스틸 027.jpg',
+        '스틸컷/단편영화/바보선언/C5003.01_15_30_06.스틸 028.jpg',
+        '스틸컷/단편영화/바보선언/C5003.00_44_08_07.스틸 029.jpg',
+        '스틸컷/단편영화/바보선언/C5003.00_49_13_17.스틸 030.jpg',
+      ]
+    },
+    {
+      id: 12, category: 'shortfilm',
+      title: 'THE VIGILANTE', year: '2026',
+      thumb: '스틸컷/단편영화/주의자/시퀀스 04.01_00_27_03.스틸 080.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/단편영화/주의자/시퀀스 04.01_00_27_03.스틸 080.jpg',
+        '스틸컷/단편영화/주의자/시퀀스 04.01_00_31_00.스틸 079.jpg',
+        '스틸컷/단편영화/주의자/시퀀스 04.01_02_04_21.스틸 077.jpg',
+        '스틸컷/단편영화/주의자/시퀀스 04.01_04_22_04.스틸 078.jpg',
+      ]
+    },
+    {
+      id: 14, category: 'shortfilm',
+      title: 'BAEK HWA', year: '2026',
+      thumb: '스틸컷/단편영화/백화/제목 없음-1.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/단편영화/백화/제목 없음-1.jpg',
+        '스틸컷/단편영화/백화/2.jpg',
+        '스틸컷/단편영화/백화/4.jpg',
+        '스틸컷/단편영화/백화/34.jpg',
+      ]
+    },
+    {
+      id: 10, category: 'shortfilm',
+      title: 'COASTLINE', year: '2025',
+      thumb: '스틸컷/단편영화/해안선/시퀀스 04.00_12_46_00.스틸 008.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/단편영화/해안선/시퀀스 04.00_14_48_21.스틸 007.jpg',
+        '스틸컷/단편영화/해안선/시퀀스 04.00_12_46_00.스틸 008.jpg',
+        '스틸컷/단편영화/해안선/시퀀스 04.00_13_04_07.스틸 009.jpg',
+        '스틸컷/단편영화/해안선/시퀀스 04.00_13_28_22.스틸 010.jpg',
+        '스틸컷/단편영화/해안선/시퀀스 04.00_13_57_20.스틸 011.jpg',
+        '스틸컷/단편영화/해안선/시퀀스 04.00_14_01_17.스틸 012.jpg',
+        '스틸컷/단편영화/해안선/시퀀스 04.00_14_10_23.스틸 013.jpg',
+        '스틸컷/단편영화/해안선/시퀀스 04.00_15_13_18.스틸 014.jpg',
+      ]
+    },
+    {
+      id: 11, category: 'shortfilm',
+      title: 'SUMMON', year: '2025',
+      thumb: '스틸컷/단편영화/소환/C5003.00_20_02_08.스틸 012.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/단편영화/소환/C5003.00_20_02_08.스틸 012.jpg',
+        '스틸컷/단편영화/소환/C5003.00_21_47_10.스틸 013.jpg',
+        '스틸컷/단편영화/소환/C5003.00_25_39_14.스틸 014.jpg',
+        '스틸컷/단편영화/소환/C5003.00_34_33_09.스틸 015.jpg',
+        '스틸컷/단편영화/소환/C5003.00_34_54_19.스틸 016.jpg',
+        '스틸컷/단편영화/소환/C5003.00_37_32_14.스틸 017.jpg',
+        '스틸컷/단편영화/소환/C5003.00_20_56_16.스틸 020.jpg',
+      ]
+    },
+    {
+      id: 13, category: 'shortfilm',
+      title: 'WINGS BELOW THE BRIDGE', year: '2025',
+      thumb: '스틸컷/단편영화/다리아래에 아직 날개가 있다/C5003.00_04_52_15.스틸 007.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/단편영화/다리아래에 아직 날개가 있다/C5003.00_04_52_15.스틸 007.jpg',
+        '스틸컷/단편영화/다리아래에 아직 날개가 있다/C5003.00_01_28_16.스틸 005.jpg',
+        '스틸컷/단편영화/다리아래에 아직 날개가 있다/C5003.00_01_37_07.스틸 006.jpg',
+        '스틸컷/단편영화/다리아래에 아직 날개가 있다/C5003.00_11_52_18.스틸 008.jpg',
+        '스틸컷/단편영화/다리아래에 아직 날개가 있다/C5003.00_13_38_05.스틸 009.jpg',
+        '스틸컷/단편영화/다리아래에 아직 날개가 있다/C5003.00_15_58_18.스틸 011.jpg',
+        '스틸컷/단편영화/다리아래에 아직 날개가 있다/C5003.00_18_21_18.스틸 010.jpg',
+      ]
+    },
+    {
+      id: 16, category: 'shortfilm',
+      title: 'PLEASE, BOSS', year: '2025',
+      thumb: '스틸컷/단편영화/부장님 제발요/시퀀스 04.01_01_42_17.스틸 081.jpg',
+      type: 'gallery',
+      images: [
+        '스틸컷/단편영화/부장님 제발요/시퀀스 04.01_01_42_17.스틸 081.jpg',
+        '스틸컷/단편영화/부장님 제발요/시퀀스 04.01_01_23_05.스틸 082.jpg',
+        '스틸컷/단편영화/부장님 제발요/시퀀스 04.01_01_25_06.스틸 083.jpg',
+      ]
+    },
+    {
+      id: 21, category: 'shortfilm',
+      title: 'JUST DO AS TOLD', year: '2025',
+      thumb: '스틸컷/단편영화/하라는 대로 했을 뿐인데/시퀀스 04.00_58_39_16.스틸 041_4x3.jpg',
+      type: 'gallery', freeRatio: true,
+      images: [
+        '스틸컷/단편영화/하라는 대로 했을 뿐인데/시퀀스 04.00_58_39_16.스틸 041_4x3.jpg',
+        '스틸컷/단편영화/하라는 대로 했을 뿐인데/시퀀스 04.00_56_22_12.스틸 040_4x3.jpg',
+        '스틸컷/단편영화/하라는 대로 했을 뿐인데/시퀀스 04.00_58_52_11.스틸 042_4x3.jpg',
+      ]
+    },
+    {
+      id: 19, category: 'shortfilm',
+      title: "I'M SEO HEE-YEON", year: '2024',
+      thumb: '스틸컷/단편영화/꿈꾸는 서희연 입니다/C5003.00_40_02_17.스틸 021.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/단편영화/꿈꾸는 서희연 입니다/C5003.00_40_02_17.스틸 021.jpg',
+        '스틸컷/단편영화/꿈꾸는 서희연 입니다/C5003.00_40_23_00.스틸 022.jpg',
+        '스틸컷/단편영화/꿈꾸는 서희연 입니다/C5003.00_40_27_11.스틸 023.jpg',
+      ]
+    },
+    {
+      id: 20, category: 'shortfilm',
+      title: 'OVERDOSE', year: '2024',
+      thumb: '스틸컷/단편영화/overdose/시퀀스 04.01_04_20_02.스틸 065.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/단편영화/overdose/시퀀스 04.01_04_20_02.스틸 065.jpg',
+        '스틸컷/단편영화/overdose/시퀀스 04.01_04_10_13.스틸 063.jpg',
+        '스틸컷/단편영화/overdose/시퀀스 04.01_04_14_18.스틸 064.jpg',
+        '스틸컷/단편영화/overdose/시퀀스 04.01_04_18_21.스틸 066.jpg',
+        '스틸컷/단편영화/overdose/시퀀스 04.01_03_44_20.스틸 067.jpg',
+        '스틸컷/단편영화/overdose/시퀀스 04.01_03_46_16.스틸 068.jpg',
+      ]
+    },
+    {
+      id: 15, category: 'shortfilm',
+      title: 'MIN CHEOL', year: '2023',
+      thumb: '스틸컷/단편영화/민철/C5003.01_21_38_06.스틸 065.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/단편영화/민철/C5003.01_21_38_06.스틸 065.jpg',
+        '스틸컷/단편영화/민철/C5003.01_24_18_19.스틸 066.jpg',
+        '스틸컷/단편영화/민철/C5003.01_29_36_20.스틸 069.jpg',
+        '스틸컷/단편영화/민철/C5003.01_24_33_15.스틸 067.jpg',
+        '스틸컷/단편영화/민철/C5003.01_27_53_06.스틸 068.jpg',
+        '스틸컷/단편영화/민철/C5003.01_32_00_06.스틸 070.jpg',
+      ]
+    },
+    {
+      id: 27, category: 'commercial',
+      title: 'BMW M5', year: '',
+      thumb: '스틸컷/광고/m5 썸네일/jRfcqw_l7So_1920x1080.jpeg',
+      youtube: 'jRfcqw_l7So'
+    },
+    {
+      id: 26, category: 'commercial',
+      title: 'MINA CHEONG', year: '2026',
+      thumb: '스틸컷/광고/미나청/C5003.01_58_15_16.스틸 055.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/광고/미나청/C5003.01_58_15_16.스틸 055.jpg',
+        '스틸컷/광고/미나청/C5003.01_59_26_11.스틸 056.jpg',
+        '스틸컷/광고/미나청/C5003.02_00_39_08.스틸 058.jpg',
+        '스틸컷/광고/미나청/C5003.02_01_28_22.스틸 059.jpg',
+        '스틸컷/광고/미나청/C5003.02_00_17_22.스틸 061.jpg',
+        '스틸컷/광고/미나청/C5003.02_00_41_23.스틸 062.jpg',
+        '스틸컷/광고/미나청/C5003.02_00_45_07.스틸 063.jpg',
+        '스틸컷/광고/미나청/C5003.02_02_33_20.스틸 064.jpg',
+        '스틸컷/광고/미나청/C5003.01_59_55_21.스틸 057.jpg',
+        '스틸컷/광고/미나청/C5003.02_02_14_03.스틸 060.jpg',
+      ]
+    },
+    {
+      id: 9, category: 'automotive',
+      title: 'LAMBORGHINI SUPER TROFEO', year: '2025',
+      thumb: '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC01231_thumb.jpg',
+      type: 'gallery', freeRatio: true,
+      images: [
+        '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC01231.jpg',
+        '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC01552.jpg',
+        '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC01837.jpg',
+        '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC02623.jpg',
+        '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC03768.jpg',
+        '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC00393.jpg',
+        '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC02230.jpg',
+        '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC03825.jpg',
+        '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC00023.jpg',
+      ]
+    },
+    {
+      id: 24, category: 'automotive',
+      title: 'MERRY CHRISTMAS', year: '2024',
+      thumb: '스틸컷/자동차/메리크리스마스/C5003.02_00_39_16.스틸 048.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/자동차/메리크리스마스/C5003.01_59_57_16.스틸 044.jpg',
+        '스틸컷/자동차/메리크리스마스/C5003.02_00_04_14.스틸 045.jpg',
+        '스틸컷/자동차/메리크리스마스/C5003.02_00_14_07.스틸 046.jpg',
+        '스틸컷/자동차/메리크리스마스/C5003.02_00_33_17.스틸 047.jpg',
+        '스틸컷/자동차/메리크리스마스/C5003.02_00_39_16.스틸 048.jpg',
+      ]
+    },
+    {
+      id: 7, category: 'automotive',
+      title: 'WIDEBODY GENESIS COUPE', year: '2024',
+      thumb: '스틸컷/시퀀스 04.01_05_08_16.스틸 070.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/시퀀스 04.01_05_08_16.스틸 070.jpg',
+        '스틸컷/시퀀스 04.01_04_57_20.스틸 075.jpg',
+        '스틸컷/시퀀스 04.01_05_11_19.스틸 071.jpg',
+        '스틸컷/시퀀스 04.01_06_02_03.스틸 072.jpg',
+        '스틸컷/시퀀스 04.01_06_34_10.스틸 073.jpg',
+        '스틸컷/시퀀스 04.01_06_39_19.스틸 074.jpg',
+      ]
+    },
+    {
+      id: 23, category: 'automotive',
+      title: 'WAREHOUSE CAR MEET', year: '2024',
+      thumb: '스틸컷/자동차/웨어하우스 카밋/C5003.01_57_13_00.스틸 043.jpg',
+      type: 'gallery',
+      images: [
+        '스틸컷/자동차/웨어하우스 카밋/C5003.01_57_13_00.스틸 043.jpg',
+        '스틸컷/자동차/웨어하우스 카밋/C5003.01_57_32_23.스틸 037.jpg',
+        '스틸컷/자동차/웨어하우스 카밋/C5003.01_58_05_01.스틸 038.jpg',
+        '스틸컷/자동차/웨어하우스 카밋/C5003.01_58_16_11.스틸 039.jpg',
+        '스틸컷/자동차/웨어하우스 카밋/C5003.01_58_38_13.스틸 040.jpg',
+        '스틸컷/자동차/웨어하우스 카밋/C5003.01_58_44_16.스틸 041.jpg',
+        '스틸컷/자동차/웨어하우스 카밋/C5003.01_58_52_21.스틸 042.jpg',
+      ]
+    },
+    {
+      id: 25, category: 'automotive',
+      title: 'THE FASTEST PIZZA DELIVERY', year: '2024',
+      thumb: '스틸컷/자동차/더 페스티스트 피자 딜리버리/C5003.02_01_43_00.스틸 049.jpg',
+      type: 'gallery', letterbox: true, thumbExtraZoom: true,
+      images: [
+        '스틸컷/자동차/더 페스티스트 피자 딜리버리/C5003.02_01_43_00.스틸 049.jpg',
+        '스틸컷/자동차/더 페스티스트 피자 딜리버리/C5003.02_01_31_06.스틸 050.jpg',
+        '스틸컷/자동차/더 페스티스트 피자 딜리버리/C5003.02_02_50_12.스틸 051.jpg',
+        '스틸컷/자동차/더 페스티스트 피자 딜리버리/C5003.02_03_07_21.스틸 052.jpg',
+        '스틸컷/자동차/더 페스티스트 피자 딜리버리/C5003.02_02_00_22.스틸 053.jpg',
+        '스틸컷/자동차/더 페스티스트 피자 딜리버리/C5003.02_02_53_20.스틸 054.jpg',
+      ]
+    },
+    {
+      id: 8, category: 'automotive',
+      title: 'BMW M4 & NISSAN 370Z', year: '2024',
+      thumb: '스틸컷/자동차/m4 & 370z/C5003.00_01_00_18.스틸 001.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/자동차/m4 & 370z/C5003.00_01_00_18.스틸 001.jpg',
+        '스틸컷/자동차/m4 & 370z/C5003.00_01_13_01.스틸 002.jpg',
+        '스틸컷/자동차/m4 & 370z/C5003.00_01_31_08.스틸 003.jpg',
+        '스틸컷/자동차/m4 & 370z/C5003.00_01_17_13.스틸 004.jpg',
+      ]
+    },
+    {
+      id: 22, category: 'automotive',
+      title: 'F82 M4', year: '2022',
+      thumb: '스틸컷/자동차/엠포/C5003.01_55_59_06.스틸 031.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/자동차/엠포/C5003.01_55_59_06.스틸 031.jpg',
+        '스틸컷/자동차/엠포/C5003.01_56_11_00.스틸 032.jpg',
+        '스틸컷/자동차/엠포/C5003.01_56_15_15.스틸 033.jpg',
+        '스틸컷/자동차/엠포/C5003.01_56_19_09.스틸 034.jpg',
+        '스틸컷/자동차/엠포/C5003.01_56_33_09.스틸 035.jpg',
+      ]
+    },
+  ];
+
+  document.getElementById('statProjects').textContent = works.length + '+';
+
+  const playIcon = `
+    <svg width="18" height="20" viewBox="0 0 18 20" fill="white">
+      <path d="M1 1l16 9-16 9V1z"/>
+    </svg>`;
+
+  const photoIcon = `
+    <svg width="22" height="20" viewBox="0 0 24 22" fill="none" stroke="white" stroke-width="1.5">
+      <rect x="1" y="4" width="22" height="16" rx="2"/>
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M8 4l2-3h4l2 3"/>
+    </svg>`;
+
+  const placeholderIcon = `
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+      <path d="M8 5v14l11-7z"/>
+    </svg>`;
+
+  const categoryMeta = {
+    shortfilm:  { title: 'Short Film',  desc: 'Crafting Cinema' },
+    commercial: { title: 'Commercial',  desc: 'Brand Storytelling' },
+    automotive: { title: 'Automotive',  desc: 'Motion & Machines' },
+  };
+
+  function renderWorks() {
+    const container = document.getElementById('worksContainer');
+    const order = ['shortfilm', 'commercial', 'automotive'];
+
+    container.innerHTML = order.map(cat => {
+      const items = works.filter(w => w.category === cat);
+      if (!items.length) return '';
+      const { title, desc } = categoryMeta[cat];
+      const cards = items.map(w => {
+        const isGallery = w.type === 'gallery';
+        const onclick = isGallery
+          ? `openGallery(${w.id}, event)`
+          : `openModal('${w.youtube}','${w.title}')`;
+        const icon = isGallery ? '' : playIcon;
+        return `
+          <div class="work-card${w.letterbox ? ' letterbox' : ''}${w.thumbExtraZoom ? ' extra-zoom' : ''}" onclick="${onclick}">
+            ${w.thumb
+              ? `<img src="${w.thumb}" alt="${w.title}" loading="lazy" />`
+              : `<div class="work-placeholder">${placeholderIcon}</div>`
+            }
+            <div class="work-card-overlay">
+              ${icon ? `<div class="work-play">${icon}</div>` : ''}
+              <div class="work-info-title">${w.title}</div>
+              <div class="work-info-year">${w.year}</div>
+            </div>
+          </div>`;
+      }).join('');
+
+      return `
+        <div class="works-category reveal">
+          <div class="works-category-title">${title}</div>
+          <div class="works-category-desc">${desc}</div>
+          <div class="works-grid">${cards}</div>
+        </div>`;
+    }).join('');
+
+  }
+
+  renderWorks();
+
+  // Modal
+  function openModal(youtubeId, title) {
+    document.getElementById('modalIframe').src =
+      `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.getElementById('modalIframe').src = '';
+    document.body.style.overflow = '';
+  }
+
+  // Gallery
+  let galleryImages = [], galleryIndex = 0;
+
+  let galleryFreeRatio = false;
+
+  function openGallery(workId, event) {
+    if (event) event.stopPropagation();
+    const work = works.find(w => w.id === workId);
+    if (!work || !work.images) return;
+    galleryImages = work.images;
+    galleryFreeRatio = !!work.freeRatio;
+    galleryIndex = 0;
+    renderGallery();
+    document.getElementById('galleryModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function setFreeRatioWrapperHeight(src, cb) {
+    const wrapper = document.querySelector('.gallery-img-wrapper');
+    const preload = new Image();
+    preload.onload = () => {
+      const w = wrapper.clientWidth;
+      const ratio = preload.naturalHeight / preload.naturalWidth;
+      const maxH = window.innerHeight * 0.8;
+      const h = Math.min(w * ratio, maxH);
+      wrapper.style.height = h + 'px';
+      cb();
+    };
+    preload.onerror = cb;
+    preload.src = src;
+  }
+
+  function renderGallery(fade = false) {
+    const img = document.getElementById('galleryMainImg');
+    const overlay = document.getElementById('galleryImgOverlay');
+    const wrapper = document.querySelector('.gallery-img-wrapper');
+    const src = galleryImages[galleryIndex];
+
+    if (!galleryFreeRatio) {
+      wrapper.style.height = '';
+    }
+
+    const doFade = () => {
+      if (fade) {
+        overlay.src = src;
+        overlay.classList.toggle('free-ratio', galleryFreeRatio);
+        overlay.style.transition = 'none';
+        overlay.style.opacity = '0';
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          overlay.style.transition = 'opacity 0.22s ease';
+          overlay.style.opacity = '1';
+          setTimeout(() => {
+            img.src = src;
+            img.classList.toggle('free-ratio', galleryFreeRatio);
+            overlay.style.transition = 'none';
+            overlay.style.opacity = '0';
+            updateGalleryMeta();
+          }, 230);
+        }));
+      } else {
+        img.src = src;
+        img.classList.toggle('free-ratio', galleryFreeRatio);
+        updateGalleryMeta();
+      }
+    };
+
+    if (galleryFreeRatio) {
+      setFreeRatioWrapperHeight(src, doFade);
+    } else {
+      doFade();
+    }
+  }
+
+  function updateGalleryMeta() {
+    document.getElementById('galleryCounter').textContent =
+      `${galleryIndex + 1} / ${galleryImages.length}`;
+    document.getElementById('galleryThumbs').innerHTML = galleryImages.map((src, i) => `
+      <img class="gallery-thumb ${i === galleryIndex ? 'active' : ''}"
+           src="${src}" onclick="setGalleryIndex(${i})" />
+    `).join('');
+  }
+
+  function setGalleryIndex(i) {
+    galleryIndex = i;
+    renderGallery();
+  }
+
+  document.getElementById('galleryPrev').addEventListener('click', () => {
+    galleryIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length;
+    renderGallery(true);
+  });
+  document.getElementById('galleryNext').addEventListener('click', () => {
+    galleryIndex = (galleryIndex + 1) % galleryImages.length;
+    renderGallery(true);
+  });
+
+  function closeGallery() {
+    document.getElementById('galleryModal').classList.remove('open');
+    document.getElementById('galleryMainImg').src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('galleryClose').addEventListener('click', closeGallery);
+  document.getElementById('galleryModal').addEventListener('mousedown', e => {
+    if (e.target === document.getElementById('galleryModal')) closeGallery();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('galleryModal').classList.contains('open')) {
+      if (e.key === 'ArrowLeft') { galleryIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length; renderGallery(true); }
+      if (e.key === 'ArrowRight') { galleryIndex = (galleryIndex + 1) % galleryImages.length; renderGallery(true); }
+      if (e.key === 'Escape') closeGallery();
+    }
+  });
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal')) closeModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+  // (gallery keydown already registered above)
+
+  // Reveal on scroll
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      } else {
+        entry.target.classList.remove('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  document.querySelectorAll('#worksContainer .reveal').forEach(el => revealObserver.observe(el));
+
+
+  // Drawer
+  const hamburger = document.getElementById('hamburger');
+  const drawer = document.getElementById('drawer');
+  const overlay = document.getElementById('drawerOverlay');
+
+  function openDrawer() {
+    hamburger.classList.add('open');
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    hamburger.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', () => {
+    drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+  });
+  overlay.addEventListener('click', closeDrawer);
+  document.querySelectorAll('.drawer-link').forEach(a => {
+    a.addEventListener('click', closeDrawer);
+  });
+</script>
+</body>
+</html>
