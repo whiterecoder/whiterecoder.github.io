@@ -1418,7 +1418,7 @@
 
   function setGalleryIndex(i) {
     galleryIndex = i;
-    renderGallery();
+    renderGallery(true);
   }
 
   document.getElementById('galleryPrev').addEventListener('click', () => {
@@ -1429,6 +1429,28 @@
     galleryIndex = (galleryIndex + 1) % galleryImages.length;
     renderGallery(true);
   });
+
+  // Mobile swipe to navigate gallery
+  (function() {
+    const wrapper = document.querySelector('.gallery-img-wrapper');
+    let touchStartX = 0, touchStartY = 0;
+    wrapper.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    wrapper.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) {
+          galleryIndex = (galleryIndex + 1) % galleryImages.length;
+        } else {
+          galleryIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length;
+        }
+        renderGallery(true);
+      }
+    }, { passive: true });
+  })();
 
   function closeGallery() {
     document.getElementById('galleryModal').classList.remove('open');
