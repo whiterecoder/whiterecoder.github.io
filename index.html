@@ -793,7 +793,6 @@
     <div class="works-nav">
       <button class="works-nav-btn" data-target="shortfilm">Short Film</button>
       <button class="works-nav-btn" data-target="commercial">Commercial</button>
-      <button class="works-nav-btn" data-target="automotive">Automotive</button>
     </div>
   </div>
 
@@ -1168,7 +1167,21 @@
       youtube: 'jK1uEyvpoh0'
     },
     {
-      id: 9, category: 'automotive',
+      id: 7, category: 'commercial',
+      title: 'WIDEBODY GENESIS COUPE', year: '2024',
+      thumb: '스틸컷/시퀀스 04.01_05_08_16.스틸 070.jpg',
+      type: 'gallery', letterbox: true,
+      images: [
+        '스틸컷/시퀀스 04.01_05_08_16.스틸 070.jpg',
+        '스틸컷/시퀀스 04.01_04_57_20.스틸 075.jpg',
+        '스틸컷/시퀀스 04.01_05_11_19.스틸 071.jpg',
+        '스틸컷/시퀀스 04.01_06_02_03.스틸 072.jpg',
+        '스틸컷/시퀀스 04.01_06_34_10.스틸 073.jpg',
+        '스틸컷/시퀀스 04.01_06_39_19.스틸 074.jpg',
+      ]
+    },
+    {
+      id: 9, category: 'commercial',
       title: 'LAMBORGHINI SUPER TROFEO', year: '2025',
       thumb: '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC01231_thumb.jpg',
       type: 'gallery', freeRatio: true,
@@ -1184,6 +1197,8 @@
         '스틸컷/자동차/람보르기니 슈퍼 트레페오/DSC00023.jpg',
       ]
     },
+  ];
+  /* AUTOMOTIVE — hidden, restore by changing category back to 'automotive' and adding to order/categories
     {
       id: 24, category: 'automotive',
       title: 'MERRY CHRISTMAS', year: '2024',
@@ -1197,6 +1212,7 @@
         '스틸컷/자동차/메리크리스마스/C5003.02_00_39_16.스틸 048.jpg',
       ]
     },
+    // WIDEBODY moved to commercial — see works array above
     {
       id: 7, category: 'automotive',
       title: 'WIDEBODY GENESIS COUPE', year: '2024',
@@ -1265,7 +1281,7 @@
         '스틸컷/자동차/엠포/C5003.01_56_33_09.스틸 035.jpg',
       ]
     },
-  ];
+  */
 
   document.getElementById('statProjects').textContent = works.length + '+';
 
@@ -1289,12 +1305,12 @@
   const categoryMeta = {
     shortfilm:  { title: 'Short Film',  desc: 'Crafting Cinema' },
     commercial: { title: 'Commercial',  desc: 'Brand Storytelling' },
-    automotive: { title: 'Automotive',  desc: 'Motion & Machines' },
+    // automotive: { title: 'Automotive', desc: 'Motion & Machines' },
   };
 
   function renderWorks() {
     const container = document.getElementById('worksContainer');
-    const order = ['shortfilm', 'commercial', 'automotive'];
+    const order = ['shortfilm', 'commercial'];
 
     container.innerHTML = order.map(cat => {
       const items = works.filter(w => w.category === cat);
