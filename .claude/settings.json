@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_screenshot",
+      "mcp__Claude_Preview__preview_eval",
+      "mcp__Claude_Preview__preview_list",
+      "mcp__Claude_Browser__read_console_messages",
+      "mcp__Claude_Browser__computer",
+      "mcp__Claude_Browser__navigate",
+      "mcp__Claude_Browser__tabs_create",
+      "mcp__Claude_Browser__read_page"
+    ]
+  }
+}
