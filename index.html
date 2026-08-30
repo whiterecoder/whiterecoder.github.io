@@ -780,7 +780,7 @@
   <div class="hero-content">
     <img class="hero-logo" src="whitelogo.png" alt="VANTA" />
     <h1 class="hero-slogan">MADE FOR THE SCREEN</h1>
-    <p class="hero-sub">Short Film &nbsp;·&nbsp; Commercial &nbsp;·&nbsp; Automotive</p>
+    <p class="hero-sub">Commercial &nbsp;·&nbsp; Short Film &nbsp;·&nbsp; Automotive</p>
   </div>
 </section>
 
@@ -791,8 +791,8 @@
   <div class="works-title-row reveal reveal-d1">
     <h2 class="section-title">Works</h2>
     <div class="works-nav">
-      <button class="works-nav-btn" data-target="shortfilm">Short Film</button>
       <button class="works-nav-btn" data-target="commercial">Projects</button>
+      <button class="works-nav-btn" data-target="shortfilm">Short Film</button>
     </div>
   </div>
 
@@ -1338,7 +1338,7 @@
 
   function renderWorks() {
     const container = document.getElementById('worksContainer');
-    const order = ['shortfilm', 'commercial'];
+    const order = ['commercial', 'shortfilm'];
 
     container.innerHTML = order.map(cat => {
       const items = works.filter(w => w.category === cat);
