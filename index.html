@@ -1608,7 +1608,11 @@
     backToTop.classList.toggle('visible', window.scrollY > 500);
   });
   backToTop.addEventListener('click', () => {
+    document.documentElement.style.scrollSnapType = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      document.documentElement.style.scrollSnapType = '';
+    }, 1000);
   });
 </script>
 </body>
