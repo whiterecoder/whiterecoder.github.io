@@ -221,7 +221,6 @@ document.querySelectorAll('.nb').forEach((btn,idx)=>{
   btn.addEventListener('click',()=>{
     const h=getH();
     const tops=[h.s1,h.s1+h.s2+h.sg,h.s1+h.s2+h.sg+h.nh];
-    tScroll=tops[idx];vScroll=tops[idx];
     window.scrollTo({top:tops[idx],behavior:'smooth'});
   });
 });
@@ -251,59 +250,53 @@ function tick(h){
   }
 }
 
-// Virtual scroll + hold zone
-let vScroll=window.scrollY,tScroll=window.scrollY;
+// Mobile detection
+const isMobile=('ontouchstart' in window)||navigator.maxTouchPoints>0;
 
-function holdFactor(){
-  const h=getH();
-  if(tScroll<h.s1||tScroll>=h.s1+h.s2)return 1;
-  const p=(tScroll-h.s1)/h.s2;
-  if(p>=0.55&&p<=0.80)return 0.15;
-  if(p>0.46&&p<0.55)return 0.15+(0.85)*((0.55-p)/0.09);
-  if(p>0.80&&p<0.90)return 0.15+(0.85)*((p-0.80)/0.10);
-  return 1;
-}
-
-window.addEventListener('wheel',e=>{
-  e.preventDefault();
-  const max=document.body.scrollHeight-window.innerHeight;
-  tScroll=Math.max(0,Math.min(tScroll+e.deltaY*holdFactor(),max));
-},{passive:false});
-
-let touchY=0,touchVY=0,touchT=0;
-window.addEventListener('touchstart',e=>{
-  touchY=e.touches[0].clientY;touchVY=0;touchT=Date.now();
-},{passive:true});
-window.addEventListener('touchmove',e=>{
-  const now=Date.now();const dy=touchY-e.touches[0].clientY;
-  touchVY=dy/(now-touchT+1)*16;touchY=e.touches[0].clientY;touchT=now;
-  const max=document.body.scrollHeight-window.innerHeight;
-  tScroll=Math.max(0,Math.min(tScroll+dy*holdFactor(),max));
-},{passive:true});
-window.addEventListener('touchend',()=>{
-  let vel=touchVY;
-  function coast(){
-    if(Math.abs(vel)<0.5)return;
-    const max=document.body.scrollHeight-window.innerHeight;
-    tScroll=Math.max(0,Math.min(tScroll+vel*holdFactor(),max));
-    vel*=0.92;requestAnimationFrame(coast);
+if(isMobile){
+  // Native scroll — just update animations on scroll event
+  let rafPending=false;
+  function onScroll(){
+    if(rafPending)return;
+    rafPending=true;
+    requestAnimationFrame(()=>{rafPending=false;tick(getH());});
   }
-  requestAnimationFrame(coast);
-},{passive:true});
+  window.addEventListener('scroll',onScroll,{passive:true});
+  tick(getH()); // initial render
+}else{
+  // Desktop: virtual scroll + hold zone
+  let vScroll=window.scrollY,tScroll=window.scrollY;
 
-window.addEventListener('scroll',()=>{
-  if(Math.abs(window.scrollY-vScroll)>40){vScroll=window.scrollY;tScroll=window.scrollY;}
-});
+  function holdFactor(){
+    const h=getH();
+    if(tScroll<h.s1||tScroll>=h.s1+h.s2)return 1;
+    const p=(tScroll-h.s1)/h.s2;
+    if(p>=0.55&&p<=0.80)return 0.15;
+    if(p>0.46&&p<0.55)return 0.15+(0.85)*((0.55-p)/0.09);
+    if(p>0.80&&p<0.90)return 0.15+(0.85)*((p-0.80)/0.10);
+    return 1;
+  }
 
-function loop(){
-  const h=getH();
-  const inAbout=tScroll>=h.s1&&tScroll<h.s1+h.s2;
-  vScroll+=(tScroll-vScroll)*(inAbout?0.10:0.22);
-  window.scrollTo(0,Math.round(vScroll));
-  tick(h);
-  requestAnimationFrame(loop);
+  window.addEventListener('wheel',e=>{
+    e.preventDefault();
+    const max=document.body.scrollHeight-window.innerHeight;
+    tScroll=Math.max(0,Math.min(tScroll+e.deltaY*holdFactor(),max));
+  },{passive:false});
+
+  window.addEventListener('scroll',()=>{
+    if(Math.abs(window.scrollY-vScroll)>40){vScroll=window.scrollY;tScroll=window.scrollY;}
+  });
+
+  function loop(){
+    const h=getH();
+    const inAbout=tScroll>=h.s1&&tScroll<h.s1+h.s2;
+    vScroll+=(tScroll-vScroll)*(inAbout?0.10:0.22);
+    window.scrollTo(0,Math.round(vScroll));
+    tick(h);
+    requestAnimationFrame(loop);
+  }
+  loop();
 }
-loop();
 
 function openContact(){
   const w=window.open('','_blank','width=480,height=520,resizable=no,toolbar=no,menubar=no,location=no,status=no');
