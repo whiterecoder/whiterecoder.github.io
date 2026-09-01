@@ -89,7 +89,7 @@ footer{position:relative;z-index:5;background:var(--bg);padding:clamp(32px,4vw,6
 
 <div id="sp1" style="height:120vh"></div>
 <div id="sp2" style="height:90vh"></div>
-<div id="spg" style="height:77vh"></div>
+<div id="spg" style="height:82vh"></div>
 <div id="normal">
   <div class="nsec">
     <div class="ps">Works</div>
@@ -323,7 +323,7 @@ function tick(h){
     const maxSy=document.body.scrollHeight-window.innerHeight;
     const effCta=Math.min(ctaStart,Math.max(maxSy-20,0));
     const ctaRange=Math.max(maxSy-effCta,1);
-    animInOut(ctaG,Math.min((sy-effCta)/ctaRange,1),1.5,0,0.14,0.80);
+    animInOut(ctaG,Math.min((sy-effCta)/ctaRange,1),1.5,0,0.14,1.20);
   }else{
     sc1.style.display='none';sc2.style.display='none';sc3.style.display='none';
   }
