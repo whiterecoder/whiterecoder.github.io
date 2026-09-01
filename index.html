@@ -126,7 +126,7 @@ footer{position:relative;z-index:5;background:var(--bg);padding:clamp(32px,4vw,6
       <div id="gl-title" style="font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(238,236,232,.35)"></div>
       <div style="display:flex;align-items:center;gap:16px">
         <span id="gl-counter" style="font-family:'DM Sans',sans-serif;font-size:11px;color:rgba(238,236,232,.3)"></span>
-        <button onclick="closeGallery()" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer;line-height:1">&#x2715;</button>
+        <button onclick="closeGallery()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);font-size:18px;cursor:pointer;line-height:1;padding:8px 14px;border-radius:4px;touch-action:manipulation">&#x2715;</button>
       </div>
     </div>
     <div style="position:relative;width:100%">
@@ -140,11 +140,11 @@ footer{position:relative;z-index:5;background:var(--bg);padding:clamp(32px,4vw,6
 
 <div id="ytmodal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);align-items:center;justify-content:center" onclick="if(event.target===this)closeYT()">
   <div style="width:min(90vw,900px);aspect-ratio:16/9;position:relative">
-    <button onclick="closeYT()" style="position:absolute;top:-36px;right:0;background:none;border:none;color:rgba(255,255,255,.5);font-size:22px;cursor:pointer;z-index:1">&#x2715;</button>
+    <button onclick="closeYT()" style="position:absolute;top:-46px;right:0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:16px;cursor:pointer;z-index:1;padding:8px 16px;border-radius:4px;touch-action:manipulation">&#x2715; 닫기</button>
     <iframe id="ytframe" style="width:100%;height:100%;border:none" allowfullscreen allow="autoplay; encrypted-media"></iframe>
   </div>
 </div>
-<div id="sp3" style="height:144vh"></div>
+<div id="sp3" style="height:94vh"></div>
 
 <!-- Contact modal -->
 <div id="cmodal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);align-items:center;justify-content:center" onclick="if(event.target===this)closeContact()">
@@ -290,7 +290,7 @@ function tick(h){
     animInOut(aboutG,(sy-h.s1)/h.s2,0.76,0,0.07,window.innerWidth<=768?0.24:0.12);
   }else if(sy>=ctaStart&&sy<ctaStart+h.s3){
     sc1.style.display='none';sc2.style.display='none';sc3.style.display='flex';
-    animInOut(ctaG,(sy-ctaStart)/h.s3);
+    animInOut(ctaG,(sy-ctaStart)/h.s3,1.5);
   }else{
     sc1.style.display='none';sc2.style.display='none';sc3.style.display='none';
   }
@@ -403,4 +403,19 @@ function closeContact(){
   document.getElementById('cmodal').style.display='none';
   document.body.style.overflow='';
 }
+
+// Scroll-to-top
+(function(){
+  const btn=document.createElement('button');
+  btn.innerHTML='↑';
+  btn.setAttribute('aria-label','맨 위로');
+  btn.style.cssText='position:fixed;bottom:24px;right:24px;z-index:400;width:44px;height:44px;border-radius:50%;background:rgba(238,236,232,.12);border:1px solid rgba(238,236,232,.2);color:#eee;font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .25s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;line-height:1;display:flex;align-items:center;justify-content:center';
+  document.body.appendChild(btn);
+  window.addEventListener('scroll',function(){
+    const show=window.scrollY>300;
+    btn.style.opacity=show?'1':'0';
+    btn.style.pointerEvents=show?'auto':'none';
+  },{passive:true});
+  btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+})();
 </script>

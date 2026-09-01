@@ -16,9 +16,12 @@ li{border-top:1px solid rgba(255,255,255,.07);padding:clamp(18px,2.5vw,26px) 0}
 a{color:#eee;text-decoration:none}
 a:hover{opacity:.6;transition:opacity .2s}
 .footer-copy{font-family:'Outfit',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(238,236,232,.16);margin-top:clamp(40px,6vw,64px)}
+.back-btn{position:fixed;top:clamp(16px,2.5vw,28px);left:clamp(16px,4vw,40px);font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(238,236,232,.45);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:9px 18px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;text-decoration:none;transition:color .2s,background .2s}
+.back-btn:hover{color:#eee;background:rgba(255,255,255,.1)}
 </style>
 </head>
 <body>
+<a class="back-btn" href="javascript:window.close()" onclick="window.close();return false;">← 닫기</a>
 <div class="label-top">VANTA FILM — GET IN TOUCH</div>
 <ul>
   <li>
@@ -39,5 +42,19 @@ a:hover{opacity:.6;transition:opacity .2s}
   </li>
 </ul>
 <div class="footer-copy">COPYRIGHT &copy; 2024 VANTA FILM. ALL RIGHTS RESERVED.</div>
+<script>
+(function(){
+  const btn=document.createElement('button');
+  btn.innerHTML='↑';
+  btn.style.cssText='position:fixed;bottom:24px;right:24px;z-index:400;width:44px;height:44px;border-radius:50%;background:rgba(238,236,232,.1);border:1px solid rgba(238,236,232,.18);color:#eee;font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .25s;touch-action:manipulation;-webkit-tap-highlight-color:transparent';
+  document.body.appendChild(btn);
+  window.addEventListener('scroll',function(){
+    var show=window.scrollY>200;
+    btn.style.opacity=show?'1':'0';
+    btn.style.pointerEvents=show?'auto':'none';
+  },{passive:true});
+  btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+})();
+</script>
 </body>
 </html>
