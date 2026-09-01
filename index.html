@@ -89,7 +89,7 @@ footer{position:relative;z-index:5;background:var(--bg);padding:clamp(32px,4vw,6
 
 <div id="sp1" style="height:120vh"></div>
 <div id="sp2" style="height:90vh"></div>
-<div id="spg" style="height:72vh"></div>
+<div id="spg" style="height:77vh"></div>
 <div id="normal">
   <div class="nsec">
     <div class="ps">Works</div>
@@ -317,7 +317,7 @@ function tick(h){
     if(introPlayed)animHeroOut(sy/h.s1);
   }else if(sy<h.s1+h.s2){
     sc1.style.display='none';sc2.style.display='flex';sc3.style.display='none';
-    animInOut(aboutG,(sy-h.s1)/h.s2,0.76,0,0.17,window.innerWidth<=768?0.48:0.30);
+    animInOut(aboutG,(sy-h.s1)/h.s2,0.76,0,0.22,window.innerWidth<=768?0.48:0.30);
   }else if(sy>=Math.min(ctaStart,Math.max(document.body.scrollHeight-window.innerHeight-20,0))){
     sc1.style.display='none';sc2.style.display='none';sc3.style.display='flex';
     const maxSy=document.body.scrollHeight-window.innerHeight;
