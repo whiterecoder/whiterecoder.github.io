@@ -25,7 +25,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content
 }
 #w3:hover{background-position:0%}
 /* hero units start visible (opacity:1) — JS only animates out */
-.hu{display:block;opacity:1;filter:none;transform:translateY(0);will-change:opacity,filter,transform}
+.hu{display:block;opacity:0;filter:blur(14px);transform:translateY(10px);will-change:opacity,filter,transform}
 #u_wl{position:absolute;bottom:clamp(20px,3vh,44px);right:clamp(20px,3.5vw,64px);width:clamp(90px,8vw,150px);height:clamp(90px,8vw,150px);object-fit:contain}
 /* about/cta units start hidden — JS animates in then out */
 .u{display:block;opacity:0;filter:blur(20px);transform:translateY(12px);will-change:opacity,filter,transform}
@@ -287,6 +287,20 @@ document.querySelectorAll('.nb').forEach((btn,idx)=>{
   });
 });
 
+
+let introPlayed=false;
+window.addEventListener('load',function(){
+  if(window.scrollY>80){introPlayed=true;['u1','u2','u_wl'].forEach(id=>{const el=document.getElementById(id);if(el){el.style.opacity='1';el.style.filter='none';el.style.transform='translateY(0)';}});return;}
+  const seq=[{id:'u1',d:100},{id:'u2',d:380},{id:'u_wl',d:680}];
+  seq.forEach(({id,d})=>{
+    const el=document.getElementById(id);if(!el)return;
+    setTimeout(()=>{
+      el.style.transition='opacity 0.9s ease,filter 0.9s ease,transform 0.8s ease';
+      el.style.opacity='1';el.style.filter='none';el.style.transform='translateY(0)';
+    },d);
+  });
+  setTimeout(()=>{['u1','u2','u_wl'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.transition='';});introPlayed=true;},1700);
+});
 function tick(h){
   const sy=window.scrollY;
   const ctaStart=h.s1+h.s2+h.sg+h.nh;
@@ -300,15 +314,16 @@ function tick(h){
   // Scenes
   if(sy<h.s1){
     sc1.style.display='flex';sc2.style.display='none';sc3.style.display='none';
-    animHeroOut(sy/h.s1);
+    if(introPlayed)animHeroOut(sy/h.s1);
   }else if(sy<h.s1+h.s2){
     sc1.style.display='none';sc2.style.display='flex';sc3.style.display='none';
     animInOut(aboutG,(sy-h.s1)/h.s2,0.76,0,0.17,window.innerWidth<=768?0.48:0.30);
-  }else if(sy>=ctaStart){
+  }else if(sy>=Math.min(ctaStart,Math.max(document.body.scrollHeight-window.innerHeight-20,0))){
     sc1.style.display='none';sc2.style.display='none';sc3.style.display='flex';
     const maxSy=document.body.scrollHeight-window.innerHeight;
-    const ctaRange=Math.max(maxSy-ctaStart,1);
-    animInOut(ctaG,Math.min((sy-ctaStart)/ctaRange,1),1.5,0,0.14,0.80);
+    const effCta=Math.min(ctaStart,Math.max(maxSy-20,0));
+    const ctaRange=Math.max(maxSy-effCta,1);
+    animInOut(ctaG,Math.min((sy-effCta)/ctaRange,1),1.5,0,0.14,0.80);
   }else{
     sc1.style.display='none';sc2.style.display='none';sc3.style.display='none';
   }
