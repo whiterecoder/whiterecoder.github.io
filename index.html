@@ -26,6 +26,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content
 #w3:hover{background-position:0%}
 /* hero units start visible (opacity:1) — JS only animates out */
 .hu{display:block;opacity:1;filter:none;transform:translateY(0);will-change:opacity,filter,transform}
+#u_wl{position:absolute;bottom:clamp(20px,3vh,44px);right:clamp(20px,3.5vw,64px);width:clamp(90px,8vw,150px);height:auto}
 /* about/cta units start hidden — JS animates in then out */
 .u{display:block;opacity:0;filter:blur(20px);transform:translateY(12px);will-change:opacity,filter,transform}
 .ht-pin{font-family:"Outfit",sans-serif;font-size:clamp(42px,7.2vw,148px);font-weight:900;line-height:.88;letter-spacing:-.04em}
@@ -41,10 +42,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content
 #normal{position:relative;z-index:5;background:var(--bg)}
 .nsec{padding:clamp(48px,5vw,96px) clamp(24px,4.5vw,88px)}
 .ps{font-family:"Outfit",sans-serif;font-size:clamp(44px,6.5vw,130px);font-weight:900;line-height:.88;letter-spacing:-.05em;margin-bottom:clamp(28px,3.5vw,64px)}
-.sub-label{font-size:clamp(13px,1vw,17px);letter-spacing:.12em;text-transform:uppercase;color:rgba(238,236,232,.75);margin-bottom:clamp(14px,1.4vw,22px);font-weight:400}
+.sub-label{font-size:clamp(18px,1.8vw,30px);letter-spacing:.12em;text-transform:uppercase;color:rgba(238,236,232,.75);margin-bottom:clamp(18px,1.8vw,28px);font-weight:400}
 .grid-wrap{margin-bottom:0}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
-@media(min-width:1600px){.cards{grid-template-columns:repeat(4,1fr)}}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+@media(min-width:1800px){.cards{grid-template-columns:repeat(5,1fr)}}
 @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.cards{grid-template-columns:1fr}}
 @media(max-width:600px){
@@ -112,7 +113,7 @@ footer{position:relative;z-index:5;background:var(--bg);padding:clamp(32px,4vw,6
 <div class="card" onclick="openYT('vmIWvahQj8I')" style="cursor:pointer"><img src="https://img.youtube.com/vi/vmIWvahQj8I/maxresdefault.jpg" alt="SOPA ORIGINAL" loading="lazy"><div class="hl"><div class="ht">SOPA ORIGINAL</div><div class="hy">2022</div></div></div>
       </div>
     </div>
-    <div class="sub-label" style="margin-top:clamp(36px,3.5vw,64px)">Short Film</div>
+    <div class="sub-label" style="margin-top:clamp(80px,7vw,130px)">Short Film</div>
     <div class="cards">
 <div class="card lbx" onclick="openGallery('BLUE MEMORIES',['https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5%20%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5_DI_4444_7092.4_EDI.00_02_16_00.%EC%8A%A4%ED%8B%B8%20001.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5%20%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5_DI_4444_7092.4_EDI.00_02_59_14.%EC%8A%A4%ED%8B%B8%20002.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5%20%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5_DI_4444_7092.4_EDI.00_03_10_12.%EC%8A%A4%ED%8B%B8%20003.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5%20%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5_DI_4444_7092.4_EDI.00_04_30_10.%EC%8A%A4%ED%8B%B8%20004.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5%20%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5_DI_4444_7092.4_EDI.00_10_16_22.%EC%8A%A4%ED%8B%B8%20005.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5%20%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5_DI_4444_7092.4_EDI.00_10_34_14.%EC%8A%A4%ED%8B%B8%20006.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5%20%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5_DI_4444_7092.4_EDI.00_06_10_00.%EC%8A%A4%ED%8B%B8%20007.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5%20%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5_DI_4444_7092.4_EDI.00_09_29_02.%EC%8A%A4%ED%8B%B8%20008.jpg'])" style="cursor:pointer"><img src="https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5%20%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EC%8B%9C%ED%8D%BC%EB%9F%B0%EC%B6%94%EC%96%B5_DI_4444_7092.4_EDI.00_02_16_00.%EC%8A%A4%ED%8B%B8%20001.jpg" alt="BLUE MEMORIES" loading="lazy"><div class="hl"><div class="ht">BLUE MEMORIES</div><div class="hy">2026</div></div></div>
 <div class="card lbx" onclick="openGallery('DECLARATION OF A FOOL',['https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EB%B0%94%EB%B3%B4%EC%84%A0%EC%96%B8/C5003.00_51_53_00.%EC%8A%A4%ED%8B%B8%20024.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EB%B0%94%EB%B3%B4%EC%84%A0%EC%96%B8/C5003.01_05_16_21.%EC%8A%A4%ED%8B%B8%20025.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EB%B0%94%EB%B3%B4%EC%84%A0%EC%96%B8/C5003.01_05_31_09.%EC%8A%A4%ED%8B%B8%20026.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EB%B0%94%EB%B3%B4%EC%84%A0%EC%96%B8/C5003.01_15_01_18.%EC%8A%A4%ED%8B%B8%20027.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EB%B0%94%EB%B3%B4%EC%84%A0%EC%96%B8/C5003.01_15_30_06.%EC%8A%A4%ED%8B%B8%20028.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EB%B0%94%EB%B3%B4%EC%84%A0%EC%96%B8/C5003.00_44_08_07.%EC%8A%A4%ED%8B%B8%20029.jpg','https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EB%B0%94%EB%B3%B4%EC%84%A0%EC%96%B8/C5003.00_49_13_17.%EC%8A%A4%ED%8B%B8%20030.jpg'])" style="cursor:pointer"><img src="https://whiterecoder.github.io/%EC%8A%A4%ED%8B%B8%EC%BB%B7/%EB%8B%A8%ED%8E%B8%EC%98%81%ED%99%94/%EB%B0%94%EB%B3%B4%EC%84%A0%EC%96%B8/C5003.00_51_53_00.%EC%8A%A4%ED%8B%B8%20024.jpg" alt="DECLARATION OF A FOOL" loading="lazy"><div class="hl"><div class="ht">DECLARATION OF A FOOL</div><div class="hy">2026</div></div></div>
@@ -134,11 +135,11 @@ footer{position:relative;z-index:5;background:var(--bg);padding:clamp(32px,4vw,6
 <div id="glmodal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.96);flex-direction:column;align-items:center;justify-content:center" onclick="if(event.target===this)closeGallery()">
   <div style="position:relative;width:min(92vw,1100px);display:flex;flex-direction:column;align-items:center">
     <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:12px">
-      <div id="gl-title" style="font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(238,236,232,.35)"></div>
-      <div style="display:flex;align-items:center;gap:16px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div id="gl-title" style="font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(238,236,232,.35)"></div>
         <span id="gl-counter" style="font-family:'DM Sans',sans-serif;font-size:11px;color:rgba(238,236,232,.3)"></span>
-        <button onclick="closeGallery()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);font-size:18px;cursor:pointer;line-height:1;padding:8px 14px;border-radius:4px;touch-action:manipulation">&#x2715;</button>
       </div>
+      <button onclick="closeGallery()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:11px;letter-spacing:.12em;cursor:pointer;padding:8px 16px;touch-action:manipulation;-webkit-tap-highlight-color:transparent">&#x2715; CLOSE</button>
     </div>
     <div style="position:relative;width:100%">
       <img id="gl-img" style="width:100%;max-height:78vh;object-fit:contain;display:block" src="" alt="">
@@ -361,19 +362,35 @@ if(isMobile){
   loop();
 }
 
+// Scroll lock (iOS-safe)
+let _lockScrollY=0;
+function lockScroll(){
+  _lockScrollY=window.scrollY;
+  document.body.style.overflow='hidden';
+  document.body.style.position='fixed';
+  document.body.style.top=-_lockScrollY+'px';
+  document.body.style.width='100%';
+}
+function unlockScroll(){
+  document.body.style.overflow='';
+  document.body.style.position='';
+  document.body.style.top='';
+  document.body.style.width='';
+  window.scrollTo(0,_lockScrollY);
+}
+
 // Gallery lightbox
 let glImages=[], glIdx=0;
 function openGallery(title, imgs){
   glImages=imgs; glIdx=0;
   document.getElementById('gl-title').textContent=title;
   renderGl();
-  const m=document.getElementById('glmodal');
-  m.style.display='flex';
-  document.body.style.overflow='hidden';
+  document.getElementById('glmodal').style.display='flex';
+  lockScroll();
 }
 function closeGallery(){
   document.getElementById('glmodal').style.display='none';
-  document.body.style.overflow='';
+  unlockScroll();
 }
 function renderGl(){
   const img=document.getElementById('gl-img');
@@ -418,25 +435,23 @@ document.addEventListener('keydown',e=>{
 });
 
 function openYT(id){
-  const m=document.getElementById('ytmodal');
   document.getElementById('ytframe').src='https://www.youtube.com/embed/'+id+'?autoplay=1';
-  m.style.display='flex';
-  document.body.style.overflow='hidden';
+  document.getElementById('ytmodal').style.display='flex';
+  lockScroll();
 }
 function closeYT(){
   document.getElementById('ytmodal').style.display='none';
   document.getElementById('ytframe').src='';
-  document.body.style.overflow='';
+  unlockScroll();
 }
 
 function openContact(){
-  const m=document.getElementById('cmodal');
-  m.style.display='flex';
-  document.body.style.overflow='hidden';
+  document.getElementById('cmodal').style.display='flex';
+  lockScroll();
 }
 function closeContact(){
   document.getElementById('cmodal').style.display='none';
-  document.body.style.overflow='';
+  unlockScroll();
 }
 
 // Scroll-to-top
