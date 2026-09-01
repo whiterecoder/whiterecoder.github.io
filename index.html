@@ -13,6 +13,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content
 .nb:hover,.nb.on{color:var(--fg);border-color:rgba(238,236,232,.6);background:rgba(238,236,232,.06)}
 #overlay{position:fixed;inset:0;z-index:10;pointer-events:none}
 .scene{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(80px,9vh,130px) clamp(24px,5vw,100px) clamp(40px,5vh,70px);pointer-events:none}
+#sc3 a,#sc3 button{pointer-events:auto}
 /* hero units start visible (opacity:1) — JS only animates out */
 .hu{display:block;opacity:1;filter:none;transform:translateY(0);will-change:opacity,filter,transform}
 /* about/cta units start hidden — JS animates in then out */
@@ -131,8 +132,8 @@ footer{position:relative;z-index:5;background:var(--bg);padding:clamp(32px,4vw,6
     </div>
     <div style="position:relative;width:100%">
       <img id="gl-img" style="width:100%;max-height:78vh;object-fit:contain;display:block" src="" alt="">
-      <button onclick="glNav(-1)" style="position:absolute;left:-48px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.5);font-size:28px;cursor:pointer;padding:8px">&#8249;</button>
-      <button onclick="glNav(1)" style="position:absolute;right:-48px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.5);font-size:28px;cursor:pointer;padding:8px">&#8250;</button>
+      <button onclick="glNav(-1)" style="position:absolute;left:-48px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.5);font-size:28px;cursor:pointer;padding:8px;touch-action:manipulation">&#8249;</button>
+      <button onclick="glNav(1)" style="position:absolute;right:-48px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.5);font-size:28px;cursor:pointer;padding:8px;touch-action:manipulation">&#8250;</button>
     </div>
     <div id="gl-thumbs" style="display:flex;gap:6px;margin-top:12px;overflow-x:auto;max-width:100%;padding-bottom:4px"></div>
   </div>
@@ -288,9 +289,9 @@ function tick(h){
   }else if(sy<h.s1+h.s2){
     sc1.style.display='none';sc2.style.display='flex';sc3.style.display='none';
     animInOut(aboutG,(sy-h.s1)/h.s2,0.76,0,0.07,window.innerWidth<=768?0.24:0.12);
-  }else if(sy>=ctaStart&&sy<ctaStart+h.s3){
+  }else if(sy>=ctaStart){
     sc1.style.display='none';sc2.style.display='none';sc3.style.display='flex';
-    animInOut(ctaG,(sy-ctaStart)/h.s3,1.5);
+    animInOut(ctaG,Math.min((sy-ctaStart)/h.s3,1),1.5);
   }else{
     sc1.style.display='none';sc2.style.display='none';sc3.style.display='none';
   }
@@ -365,7 +366,11 @@ function renderGl(){
   img.onload=()=>{img.style.transition='opacity .2s';img.style.opacity='1';};
   document.getElementById('gl-counter').textContent=(glIdx+1)+' / '+glImages.length;
   const thumbs=document.getElementById('gl-thumbs');
-  thumbs.innerHTML=glImages.map((src,i)=>`<img src="${src}" onclick="glJump(${i})" style="height:48px;width:auto;object-fit:cover;opacity:${i===glIdx?1:.4};cursor:pointer;flex-shrink:0;border:${i===glIdx?'1px solid rgba(255,255,255,.5)':'1px solid transparent'}">`).join('');
+  thumbs.innerHTML=glImages.map((src,i)=>`<img src="${src}" data-idx="${i}" style="height:48px;width:auto;object-fit:cover;opacity:${i===glIdx?1:.4};cursor:pointer;flex-shrink:0;border:${i===glIdx?'1px solid rgba(255,255,255,.5)':'1px solid transparent'};touch-action:manipulation;-webkit-tap-highlight-color:transparent">`).join('');
+  thumbs.querySelectorAll('img').forEach(img=>{
+    img.addEventListener('click',()=>glJump(+img.dataset.idx));
+    img.addEventListener('touchend',e=>{e.preventDefault();glJump(+img.dataset.idx);});
+  });
 }
 function glNav(d){
   glIdx=(glIdx+d+glImages.length)%glImages.length;
