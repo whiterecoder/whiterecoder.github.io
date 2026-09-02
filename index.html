@@ -345,9 +345,11 @@ document.querySelectorAll('.nb').forEach((btn,idx)=>{
     setTimeout(function(){resetSlide(prev);},2400);
   },4500);
 })();
+if('scrollRestoration' in history)history.scrollRestoration='manual';
+window.scrollTo(0,0);
 let introPlayed=false;
 window.addEventListener('load',function(){
-  if(window.scrollY>80){introPlayed=true;['u1','u2','u_wl'].forEach(id=>{const el=document.getElementById(id);if(el){el.style.opacity='1';el.style.filter='none';el.style.transform='translateY(0)';}});return;}
+  window.scrollTo(0,0);
   const seq=[{id:'u1',d:100},{id:'u2',d:380},{id:'u_wl',d:680}];
   seq.forEach(({id,d})=>{
     const el=document.getElementById(id);if(!el)return;
