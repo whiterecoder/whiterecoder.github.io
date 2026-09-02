@@ -56,7 +56,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content
 .sl{font-size:clamp(9px,0.55vw,11px);letter-spacing:.26em;text-transform:uppercase;color:var(--dim);margin-top:8px}
 #normal{position:relative;z-index:5;background:var(--bg)}
 .nsec{padding:clamp(48px,5vw,96px) clamp(24px,4.5vw,88px)}
-.ps{font-family:"Saira Condensed",sans-serif;font-size:clamp(44px,6.5vw,130px);font-weight:700;line-height:.88;letter-spacing:-.05em;margin-bottom:clamp(28px,3.5vw,64px)}
+.ps{font-family:"Saira Condensed",sans-serif;font-size:clamp(53px,7.8vw,156px);font-weight:700;line-height:.88;letter-spacing:-.05em;margin-top:clamp(20px,3vw,60px);margin-bottom:clamp(28px,3.5vw,64px)}
 .sub-label{font-size:clamp(18px,1.8vw,30px);letter-spacing:.12em;text-transform:uppercase;color:rgba(238,236,232,.75);margin-bottom:clamp(18px,1.8vw,28px);font-weight:400}
 .grid-wrap{margin-bottom:0}
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
@@ -246,7 +246,7 @@ footer{position:relative;z-index:5;background:var(--bg);padding:clamp(32px,4vw,6
         <p class="ab-body u" id="v4b" style="margin-top:1.1em">단편영화부터 광고, 스케치, 자동차 영상, 유튜브 콘텐츠까지 다양한 장르를 넘나들며, 다양한 창작자·브랜드와 함께 작업을 이어갑니다. 또한 자체 슈팅카를 보유하여 역동적인 주행 촬영 또한 가능합니다.</p>
         <p class="ab-body u" id="v4c" style="margin-top:1.1em">기획부터 촬영, 후반 작업까지 모든 단계를 함께합니다. 국내외 유수의 브랜드·아티스트와 함께한 연출, 촬영, 조명, VFX 각 분야의 감독들이 모여 어떤 프로젝트든 완성해 나갑니다. 편하게 연락 주세요.</p>
         <div class="stats">
-          <div><div class="sn u" id="v5">26<span style="font-size:.55em;opacity:.4">+</span></div><div class="sl u" id="v7">Projects</div></div>
+          <div><div class="sn u" id="v5"><span id="proj-count">30</span><span style="font-size:.55em;opacity:.4">+</span></div><div class="sl u" id="v7">Projects</div></div>
           <div><div class="sn u" id="v6">2</div><div class="sl u" id="v8">Years</div></div>
         </div>
       </div>
@@ -354,6 +354,8 @@ window.scrollTo(0,0);
 let introPlayed=false;
 window.addEventListener('load',function(){
   window.scrollTo(0,0);
+  const pc=document.getElementById('proj-count');
+  if(pc)pc.textContent=document.querySelectorAll('.card').length;
   const seq=[{id:'u1',d:100},{id:'u2',d:380},{id:'u_wl',d:680}];
   seq.forEach(({id,d})=>{
     const el=document.getElementById(id);if(!el)return;
