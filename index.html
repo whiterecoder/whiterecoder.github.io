@@ -42,10 +42,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content
 .ht-pin{font-family:"Saira Condensed",sans-serif;font-size:clamp(80px,20vw,400px);font-weight:700;line-height:.88;letter-spacing:-.03em}
 .hl-pin{display:block}
 .outline{color:var(--bg);-webkit-text-stroke:1.5px var(--fg);paint-order:stroke fill}
-#ab-bg{position:absolute;inset:0;z-index:0;clip-path:inset(100% 0 0 0)}
+#ab-bg{position:absolute;inset:0;z-index:0;clip-path:inset(100% 0 0 0);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 18%,black 82%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0%,black 18%,black 82%,transparent 100%)}
 #ab-slides{position:absolute;inset:0;overflow:hidden}
 .ab-slide{position:absolute;inset:0;background-size:cover;background-position:center center;opacity:0;transform:scale(1.07);transition:opacity 2.2s ease-in-out,transform 7s ease-out;will-change:opacity,transform}
-#ab-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,var(--bg) 0%,rgba(0,0,0,.78) 14%,rgba(0,0,0,.78) 86%,var(--bg) 100%);z-index:1}
+#ab-overlay{position:absolute;inset:0;background:rgba(0,0,0,.78);z-index:1}
 #sc2 .ab-grid{position:relative;z-index:2}
 .ab-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,5vw,100px);align-items:center;width:100%}
 .ab-ey{font-size:clamp(9px,0.55vw,11px);letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-bottom:clamp(12px,1.5vh,24px)}
